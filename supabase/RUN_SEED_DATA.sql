@@ -474,4 +474,49 @@ ON CONFLICT (id) DO UPDATE SET
   address      = EXCLUDED.address,
   vehicle_number = EXCLUDED.vehicle_number;
 
+-- ============================================================
+-- 3. Fix GoTrue token columns (NULL → empty string)
+-- GoTrue's Go code cannot scan NULL into string type
+-- ============================================================
+UPDATE auth.users SET
+  confirmation_token         = COALESCE(confirmation_token, ''),
+  recovery_token             = COALESCE(recovery_token, ''),
+  email_change_token_new     = COALESCE(email_change_token_new, ''),
+  email_change_token_current = COALESCE(email_change_token_current, ''),
+  email_change               = COALESCE(email_change, ''),
+  phone_change               = COALESCE(phone_change, ''),
+  phone_change_token         = COALESCE(phone_change_token, ''),
+  reauthentication_token     = COALESCE(reauthentication_token, '')
+WHERE email LIKE '%@sandx.com';
+
+-- ============================================================
+-- 4. Populate buyer/supplier coordinates for smart matching
+-- ============================================================
+-- Buyers
+UPDATE public.users SET lat = 20.9467, lng = 72.9520 WHERE role = 'buyer' AND full_name = 'Harpal Singh';
+UPDATE public.users SET lat = 20.3893, lng = 72.9106 WHERE role = 'buyer' AND full_name = 'Rajesh Patel';
+UPDATE public.users SET lat = 21.0851, lng = 72.8856 WHERE role = 'buyer' AND full_name = 'Mehul Desai';
+UPDATE public.users SET lat = 21.7051, lng = 72.9959 WHERE role = 'buyer' AND full_name = 'Amit Trivedi';
+UPDATE public.users SET lat = 22.2587, lng = 73.1645 WHERE role = 'buyer' AND full_name = 'Kishan Bhatt';
+UPDATE public.users SET lat = 21.6264, lng = 73.0153 WHERE role = 'buyer' AND full_name = 'Suresh Nair';
+UPDATE public.users SET lat = 23.2156, lng = 72.6369 WHERE role = 'buyer' AND full_name = 'Priya Sharma';
+UPDATE public.users SET lat = 21.0960, lng = 72.6542 WHERE role = 'buyer' AND full_name = 'Dharmesh Shah';
+UPDATE public.users SET lat = 23.0225, lng = 72.5714 WHERE role = 'buyer' AND full_name = 'Nitin Agarwal';
+UPDATE public.users SET lat = 20.6100, lng = 72.9342 WHERE role = 'buyer' AND full_name = 'Farhan Qureshi';
+-- Suppliers
+UPDATE public.users SET lat = 21.3637, lng = 72.9530 WHERE role = 'supplier' AND full_name = 'Dilip Vasava';
+UPDATE public.users SET lat = 21.8677, lng = 73.5023 WHERE role = 'supplier' AND full_name = 'Bhavesh Tadvi';
+UPDATE public.users SET lat = 20.3710, lng = 72.9050 WHERE role = 'supplier' AND full_name = 'Manoj Patidar';
+UPDATE public.users SET lat = 20.9500, lng = 73.0000 WHERE role = 'supplier' AND full_name = 'Girish Chaudhari';
+UPDATE public.users SET lat = 23.0396, lng = 72.5852 WHERE role = 'supplier' AND full_name = 'Vikram Rathod';
+
+-- Also backfill delivery_lat/lng on existing orders from buyer coordinates
+UPDATE orders o SET
+  delivery_lat = u.lat,
+  delivery_lng = u.lng
+FROM public.users u
+WHERE o.buyer_id = u.id
+  AND o.delivery_lat IS NULL
+  AND u.lat IS NOT NULL;
+
 COMMIT;

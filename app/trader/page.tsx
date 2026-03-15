@@ -11,39 +11,39 @@ import DataSheets from '@/components/DataSheets'
 // ─── Design tokens (dark theme status styles) ─────────────────────────────────
 
 const STATUS_STYLES: Record<string, string> = {
-  pending:     'bg-yellow-900/40 text-sx-amber border border-yellow-700/40',
-  confirmed:   'bg-blue-900/40 text-sx-blue border border-blue-700/40',
+  pending: 'bg-yellow-900/40 text-sx-amber border border-yellow-700/40',
+  confirmed: 'bg-blue-900/40 text-sx-blue border border-blue-700/40',
   in_progress: 'bg-orange-900/40 text-sx-accent border border-orange-700/40',
-  completed:   'bg-green-900/40 text-sx-green border border-green-700/40',
-  cancelled:   'bg-red-900/40 text-sx-red border border-red-700/40',
+  completed: 'bg-green-900/40 text-sx-green border border-green-700/40',
+  cancelled: 'bg-red-900/40 text-sx-red border border-red-700/40',
 }
 
 const TRIP_STATUS_STYLES: Record<string, string> = {
-  confirmed:  'bg-blue-900/40 text-sx-blue',
-  loading:    'bg-purple-900/40 text-purple-400',
-  loaded:     'bg-indigo-900/40 text-indigo-400',
+  confirmed: 'bg-blue-900/40 text-sx-blue',
+  loading: 'bg-purple-900/40 text-purple-400',
+  loaded: 'bg-indigo-900/40 text-indigo-400',
   in_transit: 'bg-orange-900/40 text-sx-accent',
-  delivered:  'bg-green-900/40 text-sx-green',
-  declined:   'bg-red-900/40 text-sx-red',
-  cancelled:  'bg-red-900/40 text-sx-red',
+  delivered: 'bg-green-900/40 text-sx-green',
+  declined: 'bg-red-900/40 text-sx-red',
+  cancelled: 'bg-red-900/40 text-sx-red',
 }
 
 const TRUCK_STATUS_LABEL: Record<string, string> = {
   heading_to_stockyard: 'Heading',
-  at_stockyard:         'At Yard',
-  loading:              'Loading',
-  loaded:               'Loaded',
-  in_transit:           'In Transit',
-  delivered:            'Delivered',
+  at_stockyard: 'At Yard',
+  loading: 'Loading',
+  loaded: 'Loaded',
+  in_transit: 'In Transit',
+  delivered: 'Delivered',
 }
 
 const TRUCK_STATUS_COLOR: Record<string, string> = {
   heading_to_stockyard: 'bg-orange-900/40 text-sx-accent',
-  at_stockyard:         'bg-blue-900/40 text-sx-blue',
-  loading:              'bg-purple-900/40 text-purple-400',
-  loaded:               'bg-indigo-900/40 text-indigo-400',
-  in_transit:           'bg-yellow-900/40 text-sx-amber',
-  delivered:            'bg-green-900/40 text-sx-green',
+  at_stockyard: 'bg-blue-900/40 text-sx-blue',
+  loading: 'bg-purple-900/40 text-purple-400',
+  loaded: 'bg-indigo-900/40 text-indigo-400',
+  in_transit: 'bg-yellow-900/40 text-sx-amber',
+  delivered: 'bg-green-900/40 text-sx-green',
 }
 
 const TRIP_STEPS = ['Assigned', 'Loading', 'Loaded', 'In Transit', 'Delivered']
@@ -51,11 +51,11 @@ const TRIP_STEPS = ['Assigned', 'Loading', 'Loaded', 'In Transit', 'Delivered']
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: 'today',   label: 'Today',   icon: '⚡' },
-  { id: 'orders',  label: 'Orders',  icon: '📋' },
-  { id: 'fleet',   label: 'Fleet',   icon: '🚛' },
+  { id: 'today', label: 'Today', icon: '⚡' },
+  { id: 'orders', label: 'Orders', icon: '📋' },
+  { id: 'fleet', label: 'Fleet', icon: '🚛' },
   { id: 'finance', label: 'Finance', icon: '₹' },
-  { id: 'team',    label: 'Team',    icon: '👥' },
+  { id: 'team', label: 'Team', icon: '👥' },
 ]
 
 type Invitation = {
@@ -69,7 +69,7 @@ type Invitation = {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type User = { id: string; full_name: string | null; email: string; address?: string | null }
+type User = { id: string; full_name: string | null; email: string; address?: string | null; lat?: number | null; lng?: number | null }
 
 type Challan = {
   id: string
@@ -85,9 +85,9 @@ type Trip = {
   id: string
   status: string
   supplier_accepted: boolean | null
-  driver_accepted:   boolean | null
+  driver_accepted: boolean | null
   supplier: { full_name: string | null; email: string } | null
-  driver:   { full_name: string | null; email: string } | null
+  driver: { full_name: string | null; email: string } | null
 }
 
 type Order = {
@@ -181,23 +181,23 @@ function fmtINR(n: number) {
 
 function fmtLakh(n: number) {
   if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`
-  if (n >= 1000)   return `₹${(n / 1000).toFixed(1)}K`
+  if (n >= 1000) return `₹${(n / 1000).toFixed(1)}K`
   return fmtINR(n)
 }
 
 function tripStep(status: string): number {
   switch (status) {
-    case 'confirmed':  return 0
-    case 'loading':    return 1
-    case 'loaded':     return 2
+    case 'confirmed': return 0
+    case 'loading': return 1
+    case 'loaded': return 2
     case 'in_transit': return 3
-    case 'delivered':  return 4
-    default:           return -1
+    case 'delivered': return 4
+    default: return -1
   }
 }
 
 function AcceptanceDot({ value }: { value: boolean | null }) {
-  if (value === true)  return <span className="text-[10px] text-sx-green font-medium">Accepted</span>
+  if (value === true) return <span className="text-[10px] text-sx-green font-medium">Accepted</span>
   if (value === false) return <span className="text-[10px] text-sx-red font-medium">Declined</span>
   return <span className="text-[10px] text-sx-lo">Pending</span>
 }
@@ -211,71 +211,71 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function TraderDashboard() {
-  const router   = useRouter()
+  const router = useRouter()
   const supabase = createClient()
 
-  const [userId, setUserId]       = useState<string | null>(null)
-  const [orders, setOrders]       = useState<Order[]>([])
+  const [userId, setUserId] = useState<string | null>(null)
+  const [orders, setOrders] = useState<Order[]>([])
   const [suppliers, setSuppliers] = useState<User[]>([])
-  const [drivers, setDrivers]     = useState<User[]>([])
-  const [buyers, setBuyers]       = useState<User[]>([])
-  const [loading, setLoading]     = useState(true)
+  const [drivers, setDrivers] = useState<User[]>([])
+  const [buyers, setBuyers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('today')
 
   // Team tab state
-  const [invitations, setInvitations]           = useState<Invitation[]>([])
-  const [inviteRole, setInviteRole]             = useState<'buyer' | 'supplier' | 'truck_driver'>('buyer')
-  const [inviteName, setInviteName]             = useState('')
-  const [inviteEmail, setInviteEmail]           = useState('')
-  const [inviteSaving, setInviteSaving]         = useState(false)
-  const [inviteError, setInviteError]           = useState('')
-  const [inviteSuccess, setInviteSuccess]       = useState('')
+  const [invitations, setInvitations] = useState<Invitation[]>([])
+  const [inviteRole, setInviteRole] = useState<'buyer' | 'supplier' | 'truck_driver'>('buyer')
+  const [inviteName, setInviteName] = useState('')
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteSaving, setInviteSaving] = useState(false)
+  const [inviteError, setInviteError] = useState('')
+  const [inviteSuccess, setInviteSuccess] = useState('')
 
   // Today tab state
-  const [liveTrucks, setLiveTrucks]         = useState<DispatchTruck[]>([])
+  const [liveTrucks, setLiveTrucks] = useState<DispatchTruck[]>([])
   const [assignModalTruckId, setAssignModal] = useState<string | null>(null)
-  const [assignBuyerId, setAssignBuyerId]   = useState('')
-  const [assignSaving, setAssignSaving]     = useState(false)
+  const [assignBuyerId, setAssignBuyerId] = useState('')
+  const [assignSaving, setAssignSaving] = useState(false)
 
   // Deals state
-  const [deals, setDeals]             = useState<Deal[]>([])
-  const [dealSubtab, setDealSubtab]   = useState<'supplier' | 'driver' | 'buyer'>('supplier')
+  const [deals, setDeals] = useState<Deal[]>([])
+  const [dealSubtab, setDealSubtab] = useState<'supplier' | 'driver' | 'buyer'>('supplier')
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null)
-  const [editRate, setEditRate]       = useState('')
-  const [editTerms, setEditTerms]     = useState('')
-  const [editCredit, setEditCredit]   = useState('')
-  const [editSaving, setEditSaving]   = useState(false)
+  const [editRate, setEditRate] = useState('')
+  const [editTerms, setEditTerms] = useState('')
+  const [editCredit, setEditCredit] = useState('')
+  const [editSaving, setEditSaving] = useState(false)
 
   // New order modal
-  const [showNewOrder, setShowNewOrder]         = useState(false)
-  const [newOrderBuyerId, setNewOrderBuyerId]   = useState('')
+  const [showNewOrder, setShowNewOrder] = useState(false)
+  const [newOrderBuyerId, setNewOrderBuyerId] = useState('')
   const [newOrderMaterial, setNewOrderMaterial] = useState('Ordinary Sand')
-  const [newOrderQty, setNewOrderQty]           = useState('')
-  const [newOrderAddress, setNewOrderAddress]   = useState('')
-  const [newOrderDate, setNewOrderDate]         = useState('')
-  const [newOrderNote, setNewOrderNote]         = useState('')
-  const [newOrderSaving, setNewOrderSaving]     = useState(false)
-  const [newOrderError, setNewOrderError]       = useState('')
+  const [newOrderQty, setNewOrderQty] = useState('')
+  const [newOrderAddress, setNewOrderAddress] = useState('')
+  const [newOrderDate, setNewOrderDate] = useState('')
+  const [newOrderNote, setNewOrderNote] = useState('')
+  const [newOrderSaving, setNewOrderSaving] = useState(false)
+  const [newOrderError, setNewOrderError] = useState('')
 
   // Smart match / confirm order modal
-  const [activeOrder, setActiveOrder]           = useState<Order | null>(null)
+  const [activeOrder, setActiveOrder] = useState<Order | null>(null)
   const [selectedSupplier, setSelectedSupplier] = useState('')
-  const [selectedDriver, setSelectedDriver]     = useState('')
-  const [confirming, setConfirming]             = useState(false)
-  const [confirmError, setConfirmError]         = useState('')
-  const [supplierRate, setSupplierRate]         = useState('')
-  const [driverRate, setDriverRate]             = useState('')
-  const [buyerRate, setBuyerRate]               = useState('')
-  const [geminiAnalysis, setGeminiAnalysis]     = useState<string | null>(null)
-  const [geminiLoading, setGeminiLoading]       = useState(false)
-  const [matchLoading, setMatchLoading]         = useState(false)
-  const [matchResult, setMatchResult]           = useState<{ best: SmartMatch; all: SmartMatch[]; aiUnavailable: boolean } | null>(null)
-  const [matchMode, setMatchMode]               = useState<'suggestion' | 'manual'>('suggestion')
+  const [selectedDriver, setSelectedDriver] = useState('')
+  const [confirming, setConfirming] = useState(false)
+  const [confirmError, setConfirmError] = useState('')
+  const [supplierRate, setSupplierRate] = useState('')
+  const [driverRate, setDriverRate] = useState('')
+  const [buyerRate, setBuyerRate] = useState('')
+  const [geminiAnalysis, setGeminiAnalysis] = useState<string | null>(null)
+  const [geminiLoading, setGeminiLoading] = useState(false)
+  const [matchLoading, setMatchLoading] = useState(false)
+  const [matchResult, setMatchResult] = useState<{ best: SmartMatch; all: SmartMatch[]; aiUnavailable: boolean } | null>(null)
+  const [matchMode, setMatchMode] = useState<'suggestion' | 'manual'>('suggestion')
 
   // ─── Data fetchers ──────────────────────────────────────────────────────────
 
@@ -295,7 +295,7 @@ export default function TraderDashboard() {
   }, [])
 
   const fetchBuyers = useCallback(async () => {
-    const { data } = await supabase.from('users').select('id, full_name, email, address').eq('role', 'buyer')
+    const { data } = await supabase.from('users').select('id, full_name, email, address, lat, lng').eq('role', 'buyer')
     setBuyers(data ?? [])
   }, [])
 
@@ -442,17 +442,17 @@ export default function TraderDashboard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orderId:     order.id,
+          orderId: order.id,
           deliveryLat: order.delivery_lat,
           deliveryLng: order.delivery_lng,
-          quantityMt:  order.quantity_mt,
+          quantityMt: order.quantity_mt,
         }),
       })
       const json = await res.json()
       if (json.error) throw new Error(json.error)
       setMatchResult({
-        best:          json.best_combination,
-        all:           json.all_combinations,
+        best: json.best_combination,
+        all: json.all_combinations,
         aiUnavailable: json.ai_unavailable,
       })
     } catch {
@@ -471,10 +471,10 @@ export default function TraderDashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           supplierRate: Number(supplierRate),
-          driverRate:   Number(driverRate),
-          buyerRate:    Number(buyerRate),
-          quantityMt:   activeOrder.quantity_mt,
-          material:     activeOrder.material_type,
+          driverRate: Number(driverRate),
+          buyerRate: Number(buyerRate),
+          quantityMt: activeOrder.quantity_mt,
+          material: activeOrder.material_type,
         }),
       })
       const json = await res.json()
@@ -487,7 +487,7 @@ export default function TraderDashboard() {
 
   async function handleConfirm() {
     const supplierId = matchMode === 'suggestion' && matchResult ? matchResult.best.supplier_id : selectedSupplier
-    const driverId   = matchMode === 'suggestion' && matchResult ? matchResult.best.driver_id   : selectedDriver
+    const driverId = matchMode === 'suggestion' && matchResult ? matchResult.best.driver_id : selectedDriver
     if (!activeOrder || !supplierId || !driverId || !userId) {
       setConfirmError('Please select both a supplier and a driver.')
       return
@@ -497,7 +497,7 @@ export default function TraderDashboard() {
     const sRate = Number(supplierRate) || 0
     const dRate = Number(driverRate) || 0
     const bRate = Number(buyerRate) || 0
-    const qty   = activeOrder.quantity_mt
+    const qty = activeOrder.quantity_mt
 
     if (activeOrder.status === 'pending') {
       const { error: orderErr } = await supabase
@@ -508,19 +508,19 @@ export default function TraderDashboard() {
     }
 
     const { data: tripData, error: tripErr } = await supabase.from('trips').insert({
-      order_id:              activeOrder.id,
-      supplier_id:           supplierId,
-      driver_id:             driverId,
-      quantity_mt:           qty,
-      status:                'confirmed',
-      supplier_rate_per_mt:  sRate,
+      order_id: activeOrder.id,
+      supplier_id: supplierId,
+      driver_id: driverId,
+      quantity_mt: qty,
+      status: 'confirmed',
+      supplier_rate_per_mt: sRate,
       transport_rate_per_mt: dRate,
-      sale_rate_per_mt:      bRate,
-      supplier_amount:       sRate * qty,
-      transport_amount:      dRate * qty,
-      sale_amount:           bRate * qty,
-      gross_margin:          (bRate - sRate - dRate) * qty,
-      margin_percentage:     bRate > 0 ? ((bRate - sRate - dRate) / bRate) * 100 : 0,
+      sale_rate_per_mt: bRate,
+      supplier_amount: sRate * qty,
+      transport_amount: dRate * qty,
+      sale_amount: bRate * qty,
+      gross_margin: (bRate - sRate - dRate) * qty,
+      margin_percentage: bRate > 0 ? ((bRate - sRate - dRate) / bRate) * 100 : 0,
     }).select('id').single()
 
     if (tripErr) { setConfirmError(tripErr.message); setConfirming(false); return }
@@ -562,6 +562,17 @@ export default function TraderDashboard() {
     await fetchOrders()
   }
 
+  async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`, {
+        headers: { 'User-Agent': 'SandX/1.0' }
+      })
+      const results = await res.json()
+      if (results.length > 0) return { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) }
+    } catch { /* geocoding failed, continue without coords */ }
+    return null
+  }
+
   async function handleCreateOrderForBuyer() {
     if (!newOrderBuyerId || !newOrderQty || !newOrderAddress || !newOrderDate || !userId) {
       setNewOrderError('Please fill all required fields.')
@@ -569,22 +580,34 @@ export default function TraderDashboard() {
     }
     setNewOrderSaving(true)
     setNewOrderError('')
+
+    // Get coordinates: first from buyer profile, then geocode the address
+    const buyer = buyers.find(b => b.id === newOrderBuyerId)
+    let lat: number | null = buyer?.lat ?? null
+    let lng: number | null = buyer?.lng ?? null
+    if (!lat || !lng) {
+      const geo = await geocodeAddress(newOrderAddress)
+      if (geo) { lat = geo.lat; lng = geo.lng }
+    }
+
     const { error } = await supabase.from('orders').insert({
-      buyer_id:             newOrderBuyerId,
-      trader_id:            userId,
-      material_type:        newOrderMaterial,
-      quantity_mt:          parseFloat(newOrderQty),
-      delivery_address:     newOrderAddress,
-      scheduled_date:       newOrderDate,
+      buyer_id: newOrderBuyerId,
+      trader_id: userId,
+      material_type: newOrderMaterial,
+      quantity_mt: parseFloat(newOrderQty),
+      delivery_address: newOrderAddress,
+      delivery_lat: lat,
+      delivery_lng: lng,
+      scheduled_date: newOrderDate,
       special_instructions: newOrderNote || null,
-      status:               'pending',
+      status: 'pending',
     })
     if (error) { setNewOrderError(error.message); setNewOrderSaving(false); return }
     await supabase.from('notifications').insert({
       user_id: newOrderBuyerId,
-      title:   'New Order Created',
-      body:    `Your trader has created a new order for ${newOrderMaterial} (${newOrderQty} MT) scheduled on ${new Date(newOrderDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}.`,
-      type:    'order_created',
+      title: 'New Order Created',
+      body: `Your trader has created a new order for ${newOrderMaterial} (${newOrderQty} MT) scheduled on ${new Date(newOrderDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}.`,
+      type: 'order_created',
     })
     setShowNewOrder(false)
     setNewOrderBuyerId(''); setNewOrderQty(''); setNewOrderAddress(''); setNewOrderDate(''); setNewOrderNote('')
@@ -627,7 +650,7 @@ export default function TraderDashboard() {
 
   // ─── Derived state ───────────────────────────────────────────────────────────
 
-  const pending   = orders.filter(o => o.status === 'pending')
+  const pending = orders.filter(o => o.status === 'pending')
   const confirmed = orders.filter(o => o.status !== 'pending')
 
   const needsReassignment = confirmed.filter(o =>
@@ -644,9 +667,9 @@ export default function TraderDashboard() {
 
   // Today stats
   const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0)
-  const trucksOut    = liveTrucks.length
-  const delivered    = liveTrucks.filter(t => t.status === 'delivered').length
-  const unassigned   = liveTrucks.filter(t => !t.buyer_id && ['loaded', 'in_transit'].includes(t.status)).length
+  const trucksOut = liveTrucks.length
+  const delivered = liveTrucks.filter(t => t.status === 'delivered').length
+  const unassigned = liveTrucks.filter(t => !t.buyer_id && ['loaded', 'in_transit'].includes(t.status)).length
 
   // Exception alerts
   const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000)
@@ -1072,7 +1095,11 @@ export default function TraderDashboard() {
             <div className="space-y-3">
               <div>
                 <label className="text-xs font-semibold text-sx-lo block mb-1">Buyer *</label>
-                <select value={newOrderBuyerId} onChange={e => setNewOrderBuyerId(e.target.value)}
+                <select value={newOrderBuyerId} onChange={e => {
+                  setNewOrderBuyerId(e.target.value)
+                  const b = buyers.find(x => x.id === e.target.value)
+                  if (b?.address && !newOrderAddress) setNewOrderAddress(b.address)
+                }}
                   className="w-full bg-sx-raised border border-sx-border text-sx-hi rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sx-accent">
                   <option value="">Select buyer…</option>
                   {buyers.map(b => <option key={b.id} value={b.id}>{b.full_name ?? b.email}</option>)}
@@ -1151,8 +1178,8 @@ export default function TraderDashboard() {
               {matchLoading && (
                 <div className="flex items-center gap-3 bg-blue-900/20 border border-sx-blue rounded-xl px-4 py-3">
                   <svg className="animate-spin w-5 h-5 text-sx-blue" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
                   <p className="text-sm text-sx-blue font-medium">Finding best supplier-driver combination…</p>
                 </div>
@@ -1263,8 +1290,8 @@ export default function TraderDashboard() {
                   <div className="space-y-2">
                     {[
                       { label: 'Supplier rate', value: supplierRate, set: setSupplierRate },
-                      { label: 'Transport rate', value: driverRate,   set: setDriverRate },
-                      { label: 'Sale rate',      value: buyerRate,    set: setBuyerRate },
+                      { label: 'Transport rate', value: driverRate, set: setDriverRate },
+                      { label: 'Sale rate', value: buyerRate, set: setBuyerRate },
                     ].map(({ label, value, set }) => (
                       <div key={label} className="flex items-center gap-3">
                         <span className="text-sm text-sx-lo w-28 shrink-0">{label}</span>
@@ -1293,7 +1320,7 @@ export default function TraderDashboard() {
                       <button onClick={runGeminiMargin} disabled={geminiLoading}
                         className="text-xs font-semibold text-purple-400 hover:text-purple-300 border border-purple-800 rounded-lg px-3 py-1.5 flex items-center gap-1.5 disabled:opacity-50">
                         {geminiLoading
-                          ? <><svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg> Analyzing…</>
+                          ? <><svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Analyzing…</>
                           : '✦ Analyze margin with Gemini'
                         }
                       </button>
@@ -1371,7 +1398,7 @@ export default function TraderDashboard() {
               <input type="email" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} placeholder="they@example.com"
                 className="w-full bg-sx-raised border border-sx-border text-sx-hi rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sx-accent" />
             </div>
-            {inviteError   && <p className="text-xs text-sx-red">{inviteError}</p>}
+            {inviteError && <p className="text-xs text-sx-red">{inviteError}</p>}
             {inviteSuccess && <p className="text-xs text-sx-green">{inviteSuccess}</p>}
             <button onClick={sendInvitation} disabled={inviteSaving || !inviteName.trim() || !inviteEmail.trim()}
               className="w-full bg-sx-accent text-white rounded-xl py-2.5 text-sm font-semibold hover:opacity-90 disabled:opacity-40 transition">
@@ -1394,12 +1421,11 @@ export default function TraderDashboard() {
                     <p className="text-xs text-sx-lo truncate">{inv.email}</p>
                     <p className="text-xs text-sx-lo mt-0.5 capitalize">{inv.target_role.replace('_', ' ')}</p>
                   </div>
-                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
-                    inv.status === 'approved' ? 'bg-green-900/40 text-sx-green' :
-                    inv.status === 'rejected' ? 'bg-red-900/40 text-sx-red' :
-                    inv.status === 'used'     ? 'bg-blue-900/40 text-sx-blue' :
-                    'bg-amber-900/40 text-sx-amber'
-                  }`}>
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${inv.status === 'approved' ? 'bg-green-900/40 text-sx-green' :
+                      inv.status === 'rejected' ? 'bg-red-900/40 text-sx-red' :
+                        inv.status === 'used' ? 'bg-blue-900/40 text-sx-blue' :
+                          'bg-amber-900/40 text-sx-amber'
+                    }`}>
                     {inv.status === 'used' ? 'Signed Up' : inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}
                   </span>
                 </div>
@@ -1458,9 +1484,8 @@ function OrderCard({ order, onConfirm }: { order: Order; onConfirm?: () => void 
                 {TRIP_STEPS.map((label, i) => (
                   <div key={label} className="flex items-center flex-1 last:flex-none">
                     <div className="flex flex-col items-center">
-                      <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold transition-colors ${
-                        i <= step ? 'bg-sx-accent text-white' : 'bg-sx-raised text-sx-lo'
-                      }`}>
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold transition-colors ${i <= step ? 'bg-sx-accent text-white' : 'bg-sx-raised text-sx-lo'
+                        }`}>
                         {i < step ? '✓' : i + 1}
                       </div>
                       <span className={`text-[9px] mt-0.5 text-center leading-tight w-10 ${i <= step ? 'text-sx-accent font-medium' : 'text-sx-lo'}`}>
@@ -1612,24 +1637,24 @@ function FinanceSection({ traderId }: { traderId: string }) {
   const supabase = createClient()
   const now = new Date()
   const [financeTab, setFinanceTab] = useState<'billing' | 'payments'>('billing')
-  const [month, setMonth]         = useState(now.getMonth() + 1)
-  const [year, setYear]           = useState(now.getFullYear())
+  const [month, setMonth] = useState(now.getMonth() + 1)
+  const [year, setYear] = useState(now.getFullYear())
   const [billingSubtab, setBillingSubtab] = useState<'supplier' | 'driver' | 'buyer'>('supplier')
-  const [bills, setBills]         = useState<MonthlyBill[]>([])
-  const [parties, setParties]     = useState<User[]>([])
+  const [bills, setBills] = useState<MonthlyBill[]>([])
+  const [parties, setParties] = useState<User[]>([])
   const [generating, setGenerating] = useState<string | null>(null)
   const [downloading, setDownloading] = useState<string | null>(null)
   const [confirmations, setConfirmations] = useState<Record<string, PTC>>({})
-  const [editDue, setEditDue]     = useState<Record<string, string>>({})
-  const [editNote, setEditNote]   = useState<Record<string, string>>({})
-  const [sending, setSending]     = useState<string | null>(null)
+  const [editDue, setEditDue] = useState<Record<string, string>>({})
+  const [editNote, setEditNote] = useState<Record<string, string>>({})
+  const [sending, setSending] = useState<string | null>(null)
 
   // Payments
   const [paySubtab, setPaySubtab] = useState<'receive' | 'pay'>('receive')
-  const [payBills, setPayBills]   = useState<MonthlyBill[]>([])
-  const [logBill, setLogBill]     = useState<MonthlyBill | null>(null)
+  const [payBills, setPayBills] = useState<MonthlyBill[]>([])
+  const [logBill, setLogBill] = useState<MonthlyBill | null>(null)
   const [logAmount, setLogAmount] = useState('')
-  const [logNote, setLogNote]     = useState('')
+  const [logNote, setLogNote] = useState('')
   const [logSaving, setLogSaving] = useState(false)
 
   useEffect(() => {
@@ -1658,7 +1683,7 @@ function FinanceSection({ traderId }: { traderId: string }) {
         .select('*')
         .in('bill_id', ids)
       const map: Record<string, PTC> = {}
-      ;(ptcs ?? []).forEach((p: PTC) => { map[p.bill_id] = p })
+        ; (ptcs ?? []).forEach((p: PTC) => { map[p.bill_id] = p })
       setConfirmations(map)
     }
   }
@@ -1681,29 +1706,29 @@ function FinanceSection({ traderId }: { traderId: string }) {
 
   async function sendPaymentTerms(bill: MonthlyBill) {
     setSending(bill.id)
-    const dueDate   = editDue[bill.id]  || bill.due_date
+    const dueDate = editDue[bill.id] || bill.due_date
     const termsNote = editNote[bill.id] ?? confirmations[bill.id]?.terms_note ?? ''
     const creditDays = Math.round((new Date(dueDate).getTime() - new Date().getTime()) / 86400000)
     const { error } = await supabase
       .from('payment_term_confirmations')
       .upsert({
-        bill_id:     bill.id,
-        party_id:    bill.party_id,
-        trader_id:   traderId,
-        due_date:    dueDate,
+        bill_id: bill.id,
+        party_id: bill.party_id,
+        trader_id: traderId,
+        due_date: dueDate,
         credit_days: Math.max(0, creditDays),
-        terms_note:  termsNote || null,
-        status:      'pending',
-        sent_at:     new Date().toISOString(),
+        terms_note: termsNote || null,
+        status: 'pending',
+        sent_at: new Date().toISOString(),
       }, { onConflict: 'bill_id,party_id' })
     if (!error) {
       const monthName = new Date(year, month - 1).toLocaleString('en-IN', { month: 'long' })
       await supabase.from('notifications').insert({
         user_id: bill.party_id,
-        title:   'Payment Terms — Action Required',
-        body:    `Trader has shared payment terms for your ${monthName} ${year} bill of ₹${bill.total_amount.toLocaleString('en-IN')}. Due date: ${new Date(dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}. Please confirm.`,
-        type:    'payment_terms',
-        ref_id:  bill.id,
+        title: 'Payment Terms — Action Required',
+        body: `Trader has shared payment terms for your ${monthName} ${year} bill of ₹${bill.total_amount.toLocaleString('en-IN')}. Due date: ${new Date(dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}. Please confirm.`,
+        type: 'payment_terms',
+        ref_id: bill.id,
       })
       await fetchBills()
     }
@@ -1735,8 +1760,8 @@ function FinanceSection({ traderId }: { traderId: string }) {
       body: JSON.stringify({ type: 'bill', billId: bill.id }),
     })
     const blob = await res.blob()
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a'); a.href = url
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href = url
     const monthName = new Date(year, month - 1).toLocaleString('en-IN', { month: 'long' })
     a.download = `SandX_Bill_${bill.party?.full_name?.replace(/\s+/g, '_') ?? 'party'}_${monthName}_${year}.xlsx`
     a.click(); URL.revokeObjectURL(url)
@@ -1750,8 +1775,8 @@ function FinanceSection({ traderId }: { traderId: string }) {
       body: JSON.stringify({ type: 'trips', traderId, month, year }),
     })
     const blob = await res.blob()
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a'); a.href = url
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href = url
     const monthName = new Date(year, month - 1).toLocaleString('en-IN', { month: 'long' })
     a.download = `SandX_Trips_${monthName}_${year}.xlsx`
     a.click(); URL.revokeObjectURL(url)
@@ -1785,10 +1810,10 @@ function FinanceSection({ traderId }: { traderId: string }) {
   const ROLE_LABEL: Record<string, string> = { supplier: 'Suppliers', driver: 'Transporters', buyer: 'Buyers' }
   const billMap = Object.fromEntries(bills.map(b => [b.party_id, b]))
   const toReceive = payBills.filter(b => b.party_role === 'buyer')
-  const toPay     = payBills.filter(b => b.party_role === 'supplier' || b.party_role === 'driver')
+  const toPay = payBills.filter(b => b.party_role === 'supplier' || b.party_role === 'driver')
   const totalReceive = toReceive.reduce((s, b) => s + b.total_amount - b.amount_paid, 0)
-  const totalPay     = toPay.reduce((s, b) => s + b.total_amount - b.amount_paid, 0)
-  const netPosition  = totalReceive - totalPay
+  const totalPay = toPay.reduce((s, b) => s + b.total_amount - b.amount_paid, 0)
+  const netPosition = totalReceive - totalPay
   const shownPayBills = paySubtab === 'receive' ? toReceive : toPay
 
   return (
@@ -1842,7 +1867,7 @@ function FinanceSection({ traderId }: { traderId: string }) {
               {parties.map(p => {
                 const bill = billMap[p.id]
                 const isGen = generating === p.id
-                const isDl  = downloading === bill?.id
+                const isDl = downloading === bill?.id
                 const balance = bill ? bill.total_amount - bill.amount_paid : 0
                 return (
                   <div key={p.id} className="bg-sx-card border border-sx-border rounded-xl px-5 py-4 space-y-3">
@@ -1852,11 +1877,10 @@ function FinanceSection({ traderId }: { traderId: string }) {
                         <p className="text-xs text-sx-lo">{p.email}</p>
                       </div>
                       {bill && (
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${
-                          bill.status === 'paid' ? 'bg-green-900/40 text-sx-green' :
-                          bill.status === 'partial' ? 'bg-yellow-900/40 text-sx-amber' :
-                          'bg-red-900/40 text-sx-red'
-                        }`}>{bill.status}</span>
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${bill.status === 'paid' ? 'bg-green-900/40 text-sx-green' :
+                            bill.status === 'partial' ? 'bg-yellow-900/40 text-sx-amber' :
+                              'bg-red-900/40 text-sx-red'
+                          }`}>{bill.status}</span>
                       )}
                     </div>
 
@@ -1884,11 +1908,10 @@ function FinanceSection({ traderId }: { traderId: string }) {
                           <div className="flex items-center justify-between">
                             <p className="text-xs font-semibold text-sx-lo">Payment Terms</p>
                             {confirmations[bill.id] && (
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                                confirmations[bill.id].status === 'confirmed' ? 'bg-green-900/40 text-sx-green' :
-                                confirmations[bill.id].status === 'disputed'  ? 'bg-red-900/40 text-sx-red' :
-                                'bg-yellow-900/40 text-sx-amber'
-                              }`}>{confirmations[bill.id].status}</span>
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${confirmations[bill.id].status === 'confirmed' ? 'bg-green-900/40 text-sx-green' :
+                                  confirmations[bill.id].status === 'disputed' ? 'bg-red-900/40 text-sx-red' :
+                                    'bg-yellow-900/40 text-sx-amber'
+                                }`}>{confirmations[bill.id].status}</span>
                             )}
                           </div>
                           {confirmations[bill.id]?.status === 'disputed' && (
@@ -1999,9 +2022,8 @@ function FinanceSection({ traderId }: { traderId: string }) {
                         <p className="font-semibold text-sx-hi">{bill.party?.full_name ?? bill.party?.email ?? '—'}</p>
                         <p className="text-xs text-sx-lo capitalize">{bill.party_role} · {bill.total_trips} trips · {bill.total_weight_mt?.toFixed(1) ?? 0} MT</p>
                       </div>
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        bill.status === 'partial' ? 'bg-yellow-900/40 text-sx-amber' : 'bg-red-900/40 text-sx-red'
-                      }`}>{bill.status}</span>
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${bill.status === 'partial' ? 'bg-yellow-900/40 text-sx-amber' : 'bg-red-900/40 text-sx-red'
+                        }`}>{bill.status}</span>
                     </div>
                     <div className="flex gap-4 text-sm flex-wrap">
                       <span className="text-sx-lo">Total: <span className="font-semibold text-sx-hi">₹{bill.total_amount.toLocaleString('en-IN')}</span></span>
@@ -2016,11 +2038,10 @@ function FinanceSection({ traderId }: { traderId: string }) {
                       <p className="text-xs text-sx-lo">Due: {new Date(bill.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                     )}
                     <button onClick={() => { setLogBill(bill); setLogAmount(''); setLogNote('') }}
-                      className={`w-full rounded-lg py-1.5 text-sm font-semibold transition ${
-                        paySubtab === 'receive'
+                      className={`w-full rounded-lg py-1.5 text-sm font-semibold transition ${paySubtab === 'receive'
                           ? 'bg-green-900/30 border border-sx-green text-sx-green hover:bg-green-900/50'
                           : 'bg-red-900/30 border border-sx-red text-sx-red hover:bg-red-900/50'
-                      }`}>
+                        }`}>
                       {paySubtab === 'receive' ? 'Log Payment Received' : 'Log Payment Made'}
                     </button>
                   </div>
